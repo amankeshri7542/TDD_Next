@@ -1,6 +1,6 @@
 /** @jest-environment node */
 
-import { POST } from './route';
+import { POST, GET } from './route';
 import { NextRequest } from 'next/server';
 
 describe('/api/users', () => {
@@ -32,5 +32,14 @@ describe('/api/users', () => {
 
     expect(res.status).toBe(400);
     expect(data).toEqual({ error: 'Missing name or email' });
+  });
+
+  // TC_USERS_3: successful get all users
+  test('returns a list of users and a 200 status code', async () => {
+    const res = await GET();
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data).toEqual([{ name: 'John Doe', email: 'john.doe@example.com', id: 1 }]);
   });
 });

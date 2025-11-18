@@ -18,3 +18,7 @@ export async function POST(req: NextRequest) {
   users.push(newUser);
   return NextResponse.json(newUser, { status: 201 });
 }
+
+export async function GET() {
+  return NextResponse.json(users, { status: 200 });
+}
