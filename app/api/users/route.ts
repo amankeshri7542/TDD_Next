@@ -1,7 +1,9 @@
 import { NextResponse, NextRequest } from 'next/server';
+import { getUsers, addUser, resetUsers as reset } from './data';
 
-let users = [];
-let lastId = 0;
+export function resetUsers() {
+  reset();
+}
 
 export async function POST(req: NextRequest) {
   const user = await req.json();
@@ -13,12 +15,10 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  lastId++;
-  const newUser = { ...user, id: lastId };
-  users.push(newUser);
+  const newUser = addUser(user);
   return NextResponse.json(newUser, { status: 201 });
 }
 
 export async function GET() {
-  return NextResponse.json(users, { status: 200 });
+  return NextResponse.json(getUsers(), { status: 200 });
 }

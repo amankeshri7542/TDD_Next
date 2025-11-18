@@ -1,9 +1,13 @@
 /** @jest-environment node */
 
-import { POST, GET } from './route';
+import { POST, GET, resetUsers } from './route';
 import { NextRequest } from 'next/server';
 
 describe('/api/users', () => {
+  beforeEach(() => {
+    resetUsers();
+  });
+
   // TC_USERS_1: successful user creation
   test('creates a new user and returns a 201 status code', async () => {
     const user = { name: 'John Doe', email: 'john.doe@example.com' };
@@ -36,10 +40,18 @@ describe('/api/users', () => {
 
   // TC_USERS_3: successful get all users
   test('returns a list of users and a 200 status code', async () => {
+    // First, create a user
+    const user = { name: 'John Doe', email: 'john.doe@example.com' };
+    const createReq = new NextRequest('http://localhost/api/users', {
+      method: 'POST',
+      body: JSON.stringify(user),
+    });
+    await POST(createReq);
+
     const res = await GET();
     const data = await res.json();
 
     expect(res.status).toBe(200);
-    expect(data).toEqual([{ name: 'John Doe', email: 'john.doe@example.com', id: 1 }]);
+    expect(data).toEqual([{ ...user, id: 1 }]);
   });
 });
