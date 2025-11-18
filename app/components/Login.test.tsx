@@ -24,3 +24,15 @@ test('shows a "You are logged in." message after clicking the "Login" button', a
   // Check if the "You are logged in." message is present
   expect(screen.getByText(/you are logged in/i)).toBeInTheDocument();
 });
+
+// TC_LOGIN_3: Test that the component does not show a "You are logged in." message after the "Sign up" button is clicked
+test('does not show a "You are logged in." message after clicking the "Sign up" button', async () => {
+  const user = userEvent.setup();
+  render(<Login />);
+
+  // Click the "Sign up" button
+  await user.click(screen.getByRole('button', { name: /sign up/i }));
+
+  // Check that the "You are logged in." message is not present
+  expect(screen.queryByText(/you are logged in/i)).not.toBeInTheDocument();
+});
